@@ -30,8 +30,28 @@ document.addEventListener('mousemove', (e) => {
 });
 
 // ==========================================
-// 1. SPLIT SCREEN GATEWAY LOGIC (DYNAMIC NAME INJECTION)
+// 1. SPLIT SCREEN GATEWAY LOGIC & CONFETTI POP
 // ==========================================
+function burstConfetti(x, y) {
+    const colors = ['#ff6b8b', '#ff4757', '#ffeaa7', '#55efc4', '#74b9ff', '#a29bfe'];
+    for (let i = 0; i < 45; i++) {
+        const conf = document.createElement('div');
+        conf.className = 'confetti';
+        conf.style.left = x + 'px';
+        conf.style.top = y + 'px';
+        conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+        
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 60 + Math.random() * 120;
+        conf.style.setProperty('--tx', `${Math.cos(angle) * velocity}px`);
+        conf.style.setProperty('--ty', `${Math.sin(angle) * velocity}px`);
+        conf.style.setProperty('--rot', `${Math.random() * 360}deg`);
+        
+        document.body.appendChild(conf);
+        setTimeout(() => conf.remove(), 1200);
+    }
+}
+
 function checkUnlockDate() {
     const inputDate = document.getElementById('secret-dob').value;
     const inputName = document.getElementById('guest-name').value.trim();
@@ -49,6 +69,11 @@ function checkUnlockDate() {
         return; 
     }
 
+    // Trigger explosive celebratory button particle burst
+    const btn = document.querySelector('.unlock-btn');
+    const rect = btn.getBoundingClientRect();
+    burstConfetti(rect.left + rect.width / 2, rect.top + rect.height / 2);
+
     // --- INJECT THE NAME ACROSS THE APP ---
     document.getElementById('dynamic-name').innerText = inputName.toUpperCase();
     
@@ -56,9 +81,8 @@ function checkUnlockDate() {
         el.innerText = inputName;
     });
 
-    // Update the Live-Typing Letter String dynamically
-    letterString = `Dearest ${inputName},<br><br>Happy Birthday! Today is all about celebrating you—the amazing energy, resourcefulness, and joy you share with everyone around you.<br><br>May this new chapter bring you endless success, grand milestones, peace of mind, and adventures that keep you smiling every single day.<br><br>Keep shining brilliantly, breaking barriers, and being uniquely you!<br><br><span style='color:#ff4757; font-weight:bold; float:right; font-family:Caveat; font-size:1.8rem;'>~ Yours Truly ❤️<br>Secret Admirer</span>`;
-
+    // --- DEEPLY ROMANTIC LIVE-TYPING LETTER CONTENT ---
+    letterString = `My dearest ${inputName},<br><br>Happy Birthday to the most incredible person.<br><br>Every moment spent with you feels like a beautiful dream. Your smile lights up my world, and your heart brings so much warmth to my life.<br><br>May this special day bring you as much joy, laughter, and endless love as you give to everyone around you. I promise to always cherish, support, and celebrate you, not just today, but for all the days to come.<br><br>You are my greatest adventure.<br><br><span style='color:#ff4757; font-weight:bold; float:right; font-family:Caveat; font-size:2rem; margin-top: 15px;'>~ With all my love ❤️<br>Yours Always</span>`;
 
     // --- PROCEED TO NEXT SCREEN ---
     errorMsg.innerText = ""; 
@@ -98,7 +122,6 @@ function nextScreen(screenNum) {
             if (screenNum === '1a') initCarousel();
             if (screenNum === 4) initScratchCard(); 
             if (screenNum === 5) {
-                initDraggablePolaroids(); 
                 startHeartRain(); 
             }
         }, 500); 
@@ -224,41 +247,11 @@ function initScratchCard() {
 }
 
 // ==========================================
-// 6. DRAGGABLE POLAROIDS & LIVE TYPING
+// 6. LIVE TYPING LETTER ENGINE
 // ==========================================
-let highestZIndex = 10; 
-
-function initDraggablePolaroids() {
-    const pols = document.querySelectorAll('.polaroid');
-    pols.forEach(makeDraggable);
-}
-
-function makeDraggable(el) {
-    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    el.onmousedown = dragMouseDown; el.ontouchstart = dragMouseDown;
-
-    function dragMouseDown(e) {
-        e.preventDefault();
-        highestZIndex++; el.style.zIndex = highestZIndex;
-
-        pos3 = e.clientX || e.touches[0].clientX; pos4 = e.clientY || e.touches[0].clientY;
-        document.onmouseup = closeDragElement; document.ontouchend = closeDragElement;
-        document.onmousemove = elementDrag; document.ontouchmove = elementDrag;
-    }
-
-    function elementDrag(e) {
-        e.preventDefault();
-        pos1 = pos3 - (e.clientX || e.touches[0].clientX); pos2 = pos4 - (e.clientY || e.touches[0].clientY);
-        pos3 = e.clientX || e.touches[0].clientX; pos4 = e.clientY || e.touches[0].clientY;
-        el.style.top = (el.offsetTop - pos2) + "px"; el.style.left = (el.offsetLeft - pos1) + "px";
-    }
-    function closeDragElement() {
-        document.onmouseup = null; document.onmousemove = null; document.ontouchend = null; document.ontouchmove = null;
-    }
-}
 
 let hasTyped = false;
-let letterString = ""; // This is now dynamically filled by checkUnlockDate()
+let letterString = ""; 
 let typeIndex = 0;
 
 function openLetterCard() {
@@ -322,27 +315,59 @@ function pokeTeddy() {
     teddy.style.transform = `scale(${1 + (teddyClicks * 0.1)}) rotate(${teddyClicks * -8}deg)`;
     teddy.style.transition = 'transform 0.2s';
     
+    const cloud = document.querySelector('.teddy-hint-cloud');
+    if (cloud) { cloud.style.opacity = '0'; cloud.style.transition = 'opacity 0.3s ease'; }
+    
     if(teddyClicks === 3) {
         playSecretSound();
-        const colors = ['var(--red-balloon)', 'var(--blue-balloon)', 'var(--yellow-balloon)', 'var(--green-balloon)'];
-        for(let i = 0; i < 50; i++) {
+        
+        // FIXED: Re-added the vibrant color hexes for the teddy balloon swarm!
+        const colors = ['#ff4757', '#1e90ff', '#ffc107', '#2ed573', '#ff6b8b', '#a29bfe', '#fd79a8'];
+        const particlePool = ['balloon', 'heart', 'star'];
+
+        for(let i = 0; i < 65; i++) {
             setTimeout(() => {
-                const swarm = document.createElement('div'); swarm.className = 'swarm-balloon';
+                const swarm = document.createElement('div');
+                swarm.className = 'swarm-balloon';
                 swarm.style.left = Math.random() * 100 + 'vw';
-                const scale = (Math.random() * 0.7) + 0.6; swarm.style.transform = `scale(${scale})`;
-                swarm.style.animationDuration = (Math.random() * 3 + 3) + 's';
-                const body = document.createElement('div'); body.className = 'swarm-body';
-                body.style.background = colors[Math.floor(Math.random() * colors.length)];
-                const string = document.createElement('div'); string.className = 'swarm-string';
-                swarm.appendChild(body); swarm.appendChild(string); document.body.appendChild(swarm);
-                setTimeout(() => swarm.remove(), 6000);
-            }, Math.random() * 2000); 
+                
+                const scale = (Math.random() * 0.6) + 0.6;
+                swarm.style.transform = `scale(${scale})`;
+                swarm.style.animationDuration = (Math.random() * 2.5 + 3) + 's';
+                
+                const chosenType = particlePool[Math.floor(Math.random() * particlePool.length)];
+                
+                if (chosenType === 'balloon') {
+                    const body = document.createElement('div');
+                    body.className = 'swarm-body';
+                    body.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    const string = document.createElement('div');
+                    string.className = 'swarm-string';
+                    
+                    swarm.appendChild(body);
+                    swarm.appendChild(string);
+                } else if (chosenType === 'heart') {
+                    const hearts = ['💖', '💝', '💘', '❤️', '💕'];
+                    swarm.innerHTML = `<span style="font-size: 2.8rem; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.15));">${hearts[Math.floor(Math.random() * hearts.length)]}</span>`;
+                } else {
+                    const stars = ['✨', '⭐', '🌟', '💫'];
+                    swarm.innerHTML = `<span style="font-size: 2.8rem; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.15));">${stars[Math.floor(Math.random() * stars.length)]}</span>`;
+                }
+                
+                document.body.appendChild(swarm);
+                setTimeout(() => swarm.remove(), 5500);
+            }, Math.random() * 2200); 
         }
         
-        const secretMsg = document.createElement('div'); secretMsg.className = 'secret-text';
-        secretMsg.innerHTML = '✨ Unlocked the Balloon Party! ✨'; document.getElementById('screen1').appendChild(secretMsg);
+        const secretMsg = document.createElement('div');
+        secretMsg.className = 'secret-text';
+        secretMsg.innerHTML = '✨ Party Mode Unlocked! ✨';
+        document.getElementById('screen1').appendChild(secretMsg);
+        
         setTimeout(() => secretMsg.remove(), 4000);
-        teddyClicks = 0; setTimeout(() => teddy.style.transform = '', 1000);
+        teddyClicks = 0;
+        setTimeout(() => teddy.style.transform = '', 1000);
     }
 }
 
@@ -366,3 +391,34 @@ function startHeartRain() {
         document.body.appendChild(heart); setTimeout(() => heart.remove(), 5000);
     }, 200);
 }
+
+// --- SECRET KEYBOARD CODE ("LOVE") ---
+let pressedKeys = "";
+const secretCode = "love";
+
+document.addEventListener('keydown', (e) => {
+    pressedKeys += e.key.toLowerCase();
+    if (pressedKeys.length > secretCode.length) { pressedKeys = pressedKeys.substring(1); }
+    
+    if (pressedKeys === secretCode) {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+        osc.type = 'sine'; 
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
+        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.2); 
+        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.4); 
+        osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.6); 
+        gain.gain.setValueAtTime(0, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.1); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 2);
+        osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 2);
+        
+        for(let i=0; i<15; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div'); heart.classList.add('ambient-heart');
+                heart.innerHTML = '💖'; heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = '4rem'; heart.style.animationDuration = '3s';
+                document.body.appendChild(heart); setTimeout(() => heart.remove(), 3000);
+            }, i * 100);
+        }
+        pressedKeys = ""; 
+    }
+});
