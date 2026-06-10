@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For You ✨</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -36,7 +37,10 @@
 
     <div id="screen1" class="screen">
         <div class="teddy-container">
-            <div class="teddy-wrapper" id="left-teddy" onclick="pokeTeddy()">🧸<span class="mini-balloon">🎈</span></div>
+            <div class="teddy-wrapper" id="left-teddy" onclick="pokeTeddy()">
+                <div class="teddy-hint-cloud">Poke me! See magic ✨</div>
+                🧸<span class="mini-balloon">🎈</span>
+            </div>
             <div class="teddy-wrapper">🧸<span class="mini-balloon">🎈</span></div>
         </div>
         
@@ -151,42 +155,43 @@
         <button class="primary-btn hidden-next-btn" id="scratch-next-btn" onclick="nextScreen(5)">Final Surprise ➔</button>
     </div>
 
-    <div id="screen5" class="screen">
+    <div id="screen5" class="screen final-bouquet-screen">
         
-        <div class="polaroid" id="pol1" style="top: 8%; left: 8%; transform: rotate(-10deg);">
-            <div class="tape"></div>
-            <div class="pol-img placeholder-1">📸</div>
-            <p>Best Memories</p>
-        </div>
-        <div class="polaroid" id="pol2" style="top: 18%; right: 8%; transform: rotate(12deg);">
-            <div class="tape"></div>
-            <div class="pol-img placeholder-2">✨</div>
-            <p>Good Times</p>
+        <div class="realistic-bouquet-wrapper">
+            <img src="image_c681f4.png" alt="Bouquet" class="realistic-bouquet-img" onerror="this.style.opacity='0'">
         </div>
 
-        <div class="bouquet-container">
-            <div class="main-bouquet">
-                <div class="flower-bunch">💐✨💝</div>
-                <div class="bouquet-wrap"></div>
-            </div>
-            <div class="hanging-tag" onclick="openLetterCard()">
-                <div class="tag-string"></div>
-                <div class="tag-body"><span>Open Me ✉️</span></div>
-            </div>
+        <div class="premium-polaroid memory-left" id="pol1">
+            <div class="luxury-tape"></div>
+            <div class="photo-frame placeholder-1"><span class="frame-emoji">📸</span></div>
+            <p class="polaroid-caption">Best Memories</p>
+        </div>
+        <div class="premium-polaroid memory-right" id="pol2">
+            <div class="luxury-tape"></div>
+            <div class="photo-frame placeholder-2"><span class="frame-emoji">✨</span></div>
+            <p class="polaroid-caption">Good Times</p>
         </div>
 
-        <h1 class="tap-hint-text">For You, with Love</h1>
-        <p class="subtitle hint-blink">✨ Tap the tag on the bouquet to read your letter! ✨</p>
-        
-        <div id="letterModal" class="letter-overlay">
-            <div class="envelope-card premium-letter">
-                <span class="close-card-btn" onclick="closeLetterCard()">×</span>
-                <div class="wax-seal-decor">❤️</div>
-                
-                <div class="scrollable-letter-content custom-scrollbar">
-                    <span id="typing-content" class="romantic-handwriting"></span>
-                    <span class="typing-cursor">|</span>
-                </div>
+        <div class="pre-letter-teaser">
+            <h1 class="premium-gradient-text">For You, with Love</h1>
+            <p>A million beautiful moments led us to today. I created this digital journey just to remind you how incredibly special you are.</p>
+        </div>
+
+        <div class="action-reveal-zone">
+            <p class="subtitle hint-blink">✨ Your final surprise is waiting... ✨</p>
+            <button class="open-letter-btn" onclick="openLetterCard()">
+                <span>Open Envelope 💌</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="letterModal" class="letter-overlay">
+        <div class="envelope-card premium-letter">
+            <span class="close-card-btn" onclick="closeLetterCard()">×</span>
+            <div class="wax-seal-decor">❤️</div>
+            <div class="scrollable-letter-content custom-scrollbar">
+                <span id="typing-content" class="romantic-handwriting"></span>
+                <span class="typing-cursor">|</span>
             </div>
         </div>
     </div>
