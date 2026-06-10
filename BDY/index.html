@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You ✨</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="parallax-bg">
+        <div class="stars" id="stars1"></div>
+        <div class="stars" id="stars2"></div>
+        <div class="stars" id="stars3"></div>
+    </div>
+
+    <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+    <div id="screen0" class="screen active split-layout">
+        <div class="split-left">
+            <h1 class="lock-title">Happy Birthday! 🎈</h1>
+            <p class="lock-subtitle">A very special digital surprise has been crafted just for you.</p>
+        </div>
+        <div class="split-right">
+            <h3>Start the Celebration</h3>
+            <p class="lock-hint">Enter your name and select a date:</p>
+            
+            <input type="text" id="guest-name" class="dob-input" placeholder="Enter your beautiful name" autocomplete="off" />
+            <input type="date" id="secret-dob" class="dob-input" />
+            
+            <button class="primary-btn unlock-btn" onclick="checkUnlockDate()">Let's Celebrate 🎉</button>
+            <p id="lock-error" class="error-msg"></p>
+        </div>
+    </div>
+
+    <div id="screen1" class="screen">
+        <div class="teddy-container">
+            <div class="teddy-wrapper" id="left-teddy" onclick="pokeTeddy()">🧸<span class="mini-balloon">🎈</span></div>
+            <div class="teddy-wrapper">🧸<span class="mini-balloon">🎈</span></div>
+        </div>
+        
+        <div class="header-zone">
+            <h1>Happy Birthday, <br><span class="name-highlight">✨😍 <span id="dynamic-name"></span> 😍✨</span></h1>
+            <p class="subtitle">A beautiful journey of small surprises is waiting for you today.</p>
+        </div>
+
+        <div class="action-zone">
+            <h3>Are you ready to begin?</h3>
+            <div class="btn-box-area">
+                <button class="yes-premium-btn" onclick="nextScreen('1a')">Yes! 😍</button>
+                <button class="no-running-btn" id="no-btn" onmouseover="dodgeButton()" onmouseenter="dodgeButton()" onclick="dodgeButton()">No 😜</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="screen1a" class="screen">
+        <div class="header-zone">
+            <h1>Just a few reasons...</h1>
+            <p class="subtitle">Swipe to see why you are so special.</p>
+        </div>
+
+        <div class="carousel-container" id="reason-carousel">
+            <div class="carousel-track">
+                <div class="reason-card">
+                    <div class="reason-icon">🌟</div>
+                    <h3>Your Energy</h3>
+                    <p>You light up every room you walk into.</p>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-icon">🧠</div>
+                    <h3>Your Mind</h3>
+                    <p>The way you think and solve problems is inspiring.</p>
+                </div>
+                <div class="reason-card">
+                    <div class="reason-icon">❤️</div>
+                    <h3>Your Heart</h3>
+                    <p>You care so deeply for the people around you.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="carousel-dots">
+            <span class="dot active-dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+
+        <button class="primary-btn" style="margin-top: 20px;" onclick="nextScreen(2)">Next Surprise ➔</button>
+    </div>
+
+    <div id="screen2" class="screen">
+        <div class="header-zone">
+            <h1>Pop the Balloons! 🎈</h1>
+            <p class="subtitle">Tap each balloon to uncover a piece of the puzzle.</p>
+        </div>
+        
+        <div class="balloon-grid">
+            <div class="balloon-wrapper red" onclick="popBalloon(this)">
+                <div class="balloon-visual"><div class="balloon-body"></div><div class="balloon-string"></div></div>
+                <div class="hidden-message">Every moment with you feels like magic, <span class="dynamic-msg-name"></span>. ✨</div>
+            </div>
+            <div class="balloon-wrapper blue" onclick="popBalloon(this)">
+                <div class="balloon-visual"><div class="balloon-body"></div><div class="balloon-string"></div></div>
+                <div class="hidden-message">Your smile is my absolute favourite view. 💖</div>
+            </div>
+            <div class="balloon-wrapper yellow" onclick="popBalloon(this)">
+                <div class="balloon-visual"><div class="balloon-body"></div><div class="balloon-string"></div></div>
+                <div class="hidden-message">I am so incredibly lucky to celebrate you today. 🥂</div>
+            </div>
+            <div class="balloon-wrapper green" onclick="popBalloon(this)">
+                <div class="balloon-visual"><div class="balloon-body"></div><div class="balloon-string"></div></div>
+                <div class="hidden-message">Here is to you, today, tomorrow, and always. 🌹</div>
+            </div>
+        </div>
+
+        <button class="primary-btn hidden-next-btn" id="balloon-next-btn" onclick="nextScreen(3)">Next Surprise ➔</button>
+    </div>
+
+    <div id="screen3" class="screen">
+        <div class="header-zone">
+            <h1>Make a Wish! 🕯️</h1>
+            <p class="subtitle">Think of a beautiful wish and blow out the candle to make it real.</p>
+        </div>
+
+        <div class="cake-display-zone">
+            <div class="cake-container">
+                <div class="candle">
+                    <div class="flame" id="candle-flame" onclick="blowOutCandle()"></div>
+                </div>
+                <div class="cake-top"></div>
+                <div class="cake-base"></div>
+            </div>
+        </div>
+        <div class="tip-zone">
+            <p class="mic-hint">💡 <strong>Tip:</strong> Try blowing directly into your microphone, or tap the flame!</p>
+        </div>
+    </div>
+
+    <div id="screen4" class="screen">
+        <div class="header-zone">
+            <h1>A Hidden Memory 🎁</h1>
+            <p class="subtitle">Scratch off the silver foil to reveal what's underneath...</p>
+        </div>
+
+        <div class="scratch-container">
+            <div class="scratch-reveal-img" style="background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); display:flex; justify-content:center; align-items:center;">
+                 <h2 style="font-family: 'Caveat', cursive; color: #ff4757; font-size: 2.5rem; transform: rotate(-5deg);">Our Next Adventure! ✈️</h2>
+            </div>
+            <canvas id="scratch-canvas"></canvas>
+        </div>
+
+        <button class="primary-btn hidden-next-btn" id="scratch-next-btn" onclick="nextScreen(5)">Final Surprise ➔</button>
+    </div>
+
+    <div id="screen5" class="screen">
+        
+        <div class="polaroid" id="pol1" style="top: 8%; left: 8%; transform: rotate(-10deg);">
+            <div class="tape"></div>
+            <div class="pol-img placeholder-1">📸</div>
+            <p>Best Memories</p>
+        </div>
+        <div class="polaroid" id="pol2" style="top: 18%; right: 8%; transform: rotate(12deg);">
+            <div class="tape"></div>
+            <div class="pol-img placeholder-2">✨</div>
+            <p>Good Times</p>
+        </div>
+
+        <div class="bouquet-container">
+            <div class="main-bouquet">
+                <div class="flower-bunch">💐✨💝</div>
+                <div class="bouquet-wrap"></div>
+            </div>
+            <div class="hanging-tag" onclick="openLetterCard()">
+                <div class="tag-string"></div>
+                <div class="tag-body"><span>Open Me ✉️</span></div>
+            </div>
+        </div>
+
+        <h1 class="tap-hint-text">For You, with Love</h1>
+        <p class="subtitle hint-blink">✨ Tap the tag on the bouquet to read your letter! ✨</p>
+        
+        <div id="letterModal" class="letter-overlay">
+            <div class="envelope-card premium-letter">
+                <span class="close-card-btn" onclick="closeLetterCard()">×</span>
+                <div class="wax-seal-decor">❤️</div>
+                
+                <div class="scrollable-letter-content custom-scrollbar">
+                    <span id="typing-content" class="romantic-handwriting"></span>
+                    <span class="typing-cursor">|</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
